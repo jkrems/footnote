@@ -1,0 +1,11 @@
+language: node_js
+node_js:
+- iojs
+deploy:
+  provider: npm
+  email: jan.krems@gmail.com
+  api_key:
+    secure: VsHWXUheXD6cLjvLi1ByizKjlrapGIASWwD5pbFR2+X0fxgqk/aYHVAmpBfcHmfZoVYp7JvPyMN55wRpKw3Y5vJS33kJJouI40nkT1t39jJw1CBEkRnhYnZYbvQCUiKRrY1x6cRqwj6vbKdmQcHb9cacEqvYzBaBM68w9/UkHaydDiS4Du9qH6IaBOODRkog4nYoF4RFsznKBoyQ1nvwvNQC9gPHbnNz8hW2Cmsm0Y7POVhl59rGAan8r0WQgq1897BAWKFfu+F9T0Wlxq+6NJ4C+DVSOXqgdHCG/CpaF+8l6tZGF5iqIsGwBHivjjF1DYVQRBZeksCN44h+fw+n7O+5c33vEvCN4OW4SrJunphwV8jrPu2S6+2Od4yJrjvq5C8RUbgXBA7mfZS7uE2724K4h3yvP7Hv9vLlcCGnMtqtDbuFPCewZ1NyNW14EsSffEu66qdrTo2y0z/8sOGsEDvE/IVs7GtzwcSdUGJPphPYX/7Znn+m4IogGPHQnv/Yqchv6qHSuh9kXA41hZVC3W6b2zA9htZKa1iCYFEFafNaEib07ZetGuMU63qhfIAPEYQ7/VvVGKP+Cpq5XdcSHJg0KEGZCcGnv8GSBiMfJGhCwaUyXvWNvoy2nyxtq122MymcgZnQ9KFJOktEj6o4PJlrjcFr3U9ZoaoDBT8TdXw=
+  on:
+    tags: true
+    repo: jkrems/footnote

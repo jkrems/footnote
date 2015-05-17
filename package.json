@@ -1,0 +1,30 @@
+{
+  "name": "footnote",
+  "version": "0.0.0",
+  "description": "Annotation utilities for JavaScript",
+  "main": "index.js",
+  "scripts": {
+    "test": "tape test/*.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jkrems/footnote.git"
+  },
+  "keywords": [
+    "annotation",
+    "es7",
+    "metadata"
+  ],
+  "author": {
+    "name": "Jan Krems",
+    "email": "jan.krems@gmail.com"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jkrems/footnote/issues"
+  },
+  "homepage": "https://github.com/jkrems/footnote#readme",
+  "devDependencies": {
+    "tape": "^4.0.0"
+  }
+}
