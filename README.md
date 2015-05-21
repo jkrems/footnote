@@ -9,18 +9,18 @@ npm install --save footnote
 
 ## Usage
 
-Create annotation types using `RuntimeAnnotation.create`:
+Create annotation decorators using `Annotation.create`:
 
 ```js
-import RuntimeAnnotation from 'footnote';
+import Annotation from 'footnote';
 
 function SimpleAnnotation() {
-  return RuntimeAnnotation.create(SimpleAnnotation.prototype)
+  return Annotation.create(SimpleAnnotation.prototype)
     .apply(null, arguments);
 }
 
 function AnnotationWithParams(param) {
-  return RuntimeAnnotation.create(AnnotationWithParams.prototype, {
+  return Annotation.create(AnnotationWithParams.prototype, {
     someProperty: { value: param }
   });
 }
@@ -44,14 +44,17 @@ AnnotationWithParams('x')(ES5Class.prototype, 'foo',
 AnnotationWithParams('x')(ES5Class.prototype.foo);
 
 // The following would work the same for `ES5Class`:
-console.log(ESNextClass.annotations); // array[1]
-console.log(ESNextClass.annotations[0] instanceof SimpleAnnotation); // true
-console.log(ESNextClass.prototype.foo.annotations[0] instanceof AnnotationWithParams); // true
-console.log(ESNextClass.prototype.foo.annotations[0].someProperty); // 'x'
+const annotations = Annotation.getAnnotations(ESNextClass);
+console.log(annotations); // array[1]
+console.log(annotations[0] instanceof SimpleAnnotation); // true
+const fooAnnotations = Annotation.getAnnotations(ESNextClass.prototype.foo);
+console.log(fooAnnotations[0] instanceof AnnotationWithParams); // true
+console.log(fooAnnotations[0].someProperty); // 'x'
 
 // Also supports functions and composes:
 const f = SimpleAnnotation(AnnotationWithParams('y')(function() { return 'ok'; }));
-console.log(f.annotations.length); // 2
-console.log(f.annotations[0].someProperty); // 'y'
+const fnAnnotations = Annotation.getAnnotations(f);
+console.log(fnAnnotations.length); // 2
+console.log(fnAnnotations[0].someProperty); // 'y'
 console.log(f()); // 'ok'
 ```

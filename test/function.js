@@ -2,15 +2,15 @@
 
 const test = require('tape');
 
-const RuntimeAnnotation = require('..');
+const Annotation = require('..');
 
 function SimpleAnnotation() {
-  return RuntimeAnnotation.create(SimpleAnnotation.prototype)
+  return Annotation.create(SimpleAnnotation.prototype)
     .apply(null, arguments);
 }
 
 function AnnotationWithParams(param) {
-  return RuntimeAnnotation.create(AnnotationWithParams.prototype, {
+  return Annotation.create(AnnotationWithParams.prototype, {
     param: { value: param }
   });
 }
@@ -23,15 +23,17 @@ test('Function annotation with params', function(t) {
 
   t.equal(callResult, f, 'returns the target');
 
-  t.equal(f.annotations.length, 2, 'Creates 2 annotations');
+  const annotations = Annotation.get(f);
 
-  f.annotations.map(function(a) {
+  t.equal(annotations.length, 2, 'Creates 2 annotations');
+
+  annotations.map(function(a) {
     t.ok(a instanceof AnnotationWithParams, 'a instanceof AnnotationWithParams');
     t.equal(a.constructor, AnnotationWithParams, 'has right constructor');
   });
 
-  t.equal(f.annotations[0].param, 'foo');
-  t.equal(f.annotations[1].param, 'bar');
+  t.equal(annotations[0].param, 'foo');
+  t.equal(annotations[1].param, 'bar');
 
   t.end();
 });
@@ -45,7 +47,9 @@ test('Function annotation', function(t) {
   t.equal(callResult, f);
   t.equal(newResult, f);
 
-  f.annotations.map(function(a) {
+  const annotations = Annotation.get(f);
+
+  annotations.map(function(a) {
     t.ok(a instanceof SimpleAnnotation, 'a instanceof SimpleAnnotation');
     t.equal(a.constructor, SimpleAnnotation);
   });

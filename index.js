@@ -1,5 +1,13 @@
 'use strict';
 
+function getAnnotations(target, type) {
+  const annotations = target.annotations || [];
+  if (type === undefined) return annotations;
+  return annotations.filter(function (annotation) {
+    return annotation instanceof type;
+  });
+}
+
 function pushAnnotation(target, annotation) {
   if (typeof target === 'function') {
     target.annotations = target.annotations || [];
@@ -8,7 +16,7 @@ function pushAnnotation(target, annotation) {
   return target;
 }
 
-function createRuntimeAnnotation(proto, props) {
+function createAnnotation(proto, props) {
   annotate.prototype = proto || Object.create(Object.prototype);
 
   function annotate(target, key, pd) {
@@ -25,6 +33,8 @@ function createRuntimeAnnotation(proto, props) {
   return annotate;
 }
 
-exports.create = createRuntimeAnnotation;
-exports.createRuntimeAnnotation = createRuntimeAnnotation;
+exports.create = createAnnotation;
+exports.createAnnotation = createAnnotation;
+exports.get = getAnnotations;
+exports.getAnnotations = getAnnotations;
 exports['default'] = exports;

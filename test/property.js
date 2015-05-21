@@ -2,10 +2,10 @@
 
 const test = require('tape');
 
-const RuntimeAnnotation = require('..');
+const Annotation = require('..');
 
 function SimpleAnnotation() {
-  return RuntimeAnnotation.create(SimpleAnnotation.prototype)
+  return Annotation.create(SimpleAnnotation.prototype)
     .apply(null, arguments);
 }
 
@@ -14,7 +14,11 @@ test('annotate object property', function(t) {
   Object.defineProperty(obj, 'foo',
     SimpleAnnotation(obj, 'foo', { value: function() { return 'ok'; } }));
 
-  t.equal(obj.foo(), 'ok');
+  t.equal(obj.foo(), 'ok', 'Function still works');
+
+  const annotations = Annotation.get(obj.foo);
+
+  t.equal(annotations.length, 1, 'Creates 1 annotation');
 
   t.end();
 });
