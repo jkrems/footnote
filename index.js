@@ -1,17 +1,61 @@
 'use strict';
 
+const LOOKUP = new WeakMap();
+
 function getAnnotations(target, type) {
-  const annotations = target.annotations || [];
+  const annotations = LOOKUP.get(target) || [];
   if (type === undefined) return annotations;
   return annotations.filter(function (annotation) {
     return annotation instanceof type;
   });
 }
 
+function scanPrototypeChain(ctor, type, proto, seen) {
+  if (proto === null || proto === Object.prototype) {
+    return [];
+  }
+
+  const own = Object.getOwnPropertyNames(proto)
+    .reduce(function(found, prop) {
+      if (seen.indexOf(prop) !== -1) return found;
+      seen.push(prop);
+
+      const target = proto[prop];
+      if (typeof target !== 'function') return found;
+
+      return found.concat(getAnnotations(target, type).map(function(annotation) {
+        return {
+          annotation: annotation,
+          target: target,
+          ctor: ctor,
+          key: prop
+        };
+      }));
+    }, []);
+
+  return scanPrototypeChain(ctor, type, Object.getPrototypeOf(proto), seen)
+    .concat(own);
+}
+
+function scanFunction(target, type) {
+  return getAnnotations(target, type)
+    .map(function (annotation) {
+      return { annotation: annotation, target: target };
+    });
+}
+
+function scanAnnotations(target, type) {
+  if (typeof target === 'function') {
+    return scanFunction(target, type)
+      .concat(scanPrototypeChain(target, type, target.prototype, [ 'constructor' ]));
+  }
+  return [];
+}
+
 function pushAnnotation(target, annotation) {
   if (typeof target === 'function') {
-    target.annotations = target.annotations || [];
-    target.annotations.push(annotation);
+    if (!LOOKUP.has(target)) LOOKUP.set(target, []);
+    LOOKUP.get(target).push(annotation);
   }
   return target;
 }
@@ -37,4 +81,6 @@ exports.create = createAnnotation;
 exports.createAnnotation = createAnnotation;
 exports.get = getAnnotations;
 exports.getAnnotations = getAnnotations;
+exports.scan = scanAnnotations;
+exports.scanAnnotations = scanAnnotations;
 exports['default'] = exports;
