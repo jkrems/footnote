@@ -8,6 +8,10 @@ function getAnnotations(target, type) {
   });
 }
 
+function scanAnnotations(target, type) {
+  return getAnnotations(target, type);
+}
+
 function pushAnnotation(target, annotation) {
   if (typeof target === 'function') {
     target.annotations = target.annotations || [];
@@ -37,4 +41,6 @@ exports.create = createAnnotation;
 exports.createAnnotation = createAnnotation;
 exports.get = getAnnotations;
 exports.getAnnotations = getAnnotations;
+exports.scan = scanAnnotations;
+exports.scanAnnotations = scanAnnotations;
 exports['default'] = exports;
