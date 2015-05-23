@@ -11,7 +11,7 @@ function getAnnotations(target, type) {
 }
 
 function scanPrototypeChain(ctor, type, proto, seen) {
-  if (proto === null || proto === Object.prototype) {
+  if (!proto || proto === Object.prototype) {
     return [];
   }
 
