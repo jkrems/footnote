@@ -1,6 +1,6 @@
 {
   "name": "footnote",
-  "version": "0.0.4",
+  "version": "1.0.0",
   "description": "Annotation utilities for JavaScript",
   "main": "index.js",
   "scripts": {
