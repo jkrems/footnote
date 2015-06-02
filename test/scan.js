@@ -50,6 +50,42 @@ test('scan a function, filtered by type', function(t) {
   t.end();
 });
 
+test('scan an instance', function(t) {
+  class Base {
+    a() {} // overridden
+    b() {} // visible
+  }
+  Simple(Base);
+  Simple(Base.prototype.a);
+  Simple(Base.prototype.b);
+  Other(Base.prototype.b);
+
+  class Derived extends Base {
+    a() {}
+    c() {} // only in derived
+  }
+  Other(Derived);
+  Simple(Derived);
+  Simple(Derived.prototype.a);
+  Simple(Derived.prototype.c);
+
+  const obj = new Derived();
+  const results = Annotation.scan(obj, Simple);
+  t.equal(results.length, 3, '3 on methods');
+
+  t.equal(results[0].ctx, obj, 'Includes context objects (b)');
+  t.equal(results[0].key, 'b', 'Includes property key for methods (b)');
+  t.equal(results[0].target, obj.b, 'Includes method itself');
+
+  t.equal(results[1].ctx, obj, 'Includes context objects (a)');
+  t.equal(results[1].key, 'a', 'Includes property key for methods (a)');
+
+  t.equal(results[2].ctx, obj, 'Includes context objects (c)');
+  t.equal(results[2].key, 'c', 'Includes property key for methods (c)');
+
+  t.end();
+});
+
 test('scan a class', function(t) {
   class Base {
     a() {} // overridden
