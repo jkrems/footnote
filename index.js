@@ -48,6 +48,16 @@ function scanAnnotations(target, type) {
   if (typeof target === 'function') {
     return scanFunction(target, type)
       .concat(scanPrototypeChain(target, type, target.prototype, [ 'constructor' ]));
+  } else if (target !== null && typeof target === 'object') {
+    return scanPrototypeChain(target, type, target, [ 'constructor' ])
+      .map(function(result) {
+        return {
+          annotation: result.annotation,
+          target: result.target,
+          ctx: result.ctor,
+          key: result.key
+        };
+      });
   }
   return [];
 }
